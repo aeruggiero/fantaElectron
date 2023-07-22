@@ -1,4 +1,5 @@
-import {app} from 'electron';
+import type {Dialog} from 'electron';
+import {app, ipcMain, dialog} from 'electron';
 import './security-restrictions';
 import {restoreOrCreateWindow} from '/@/mainWindow';
 import {platform} from 'node:process';
@@ -39,7 +40,12 @@ app
   .whenReady()
   .then(restoreOrCreateWindow)
   .catch(e => console.error('Failed create window:', e));
-
+ipcMain.handle('dialog', (event, method: string, params: object) => {
+  if (method in dialog) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (dialog as any)[method as keyof Dialog].call(dialog, params);
+  }
+});
 /**
  * Install Vue.js or any other extension in development mode only.
  * Note: You must install `electron-devtools-installer` manually

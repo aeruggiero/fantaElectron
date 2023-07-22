@@ -1,54 +1,22 @@
 <script lang="ts" setup>
-import ReactiveCounter from '/@/components/ReactiveCounter.vue';
-import ReactiveHash from '/@/components/ReactiveHash.vue';
-import ElectronVersions from '/@/components/ElectronVersions.vue';
-
-const APP_VERSION = import.meta.env.VITE_APP_VERSION;
+import SearchPlayer from './components/SearchPlayer.vue';
+import SideBar from './components/SideBar.vue';
 </script>
 
 <template>
-  <img
-    alt="Vue logo"
-    src="../assets/logo.svg"
-    width="150"
-  />
+  <div class="container mx-auto">
+    <div class="flex flex-row flex-wrap py-4">
+      <SideBar />
+      <main
+        role="main"
+        class="w-full sm:w-2/3 md:w-3/4 pt-1 px-2"
+      >
+        <router-view />
 
-  <p>
-    <!-- Example how to inject current app version to UI -->
-    App version: {{ APP_VERSION }}
-  </p>
-
-  <p>
-    For a guide and recipes on how to configure / customize this project,<br />
-    check out the
-    <a
-      href="https://github.com/cawa-93/vite-electron-builder"
-      target="_blank"
-    >
-      vite-electron-builder documentation
-    </a>
-    .
-  </p>
-
-  <fieldset>
-    <legend>Test Vue Reactivity</legend>
-    <reactive-counter />
-  </fieldset>
-
-  <fieldset>
-    <legend>Test Node.js API</legend>
-    <reactive-hash />
-  </fieldset>
-
-  <fieldset>
-    <legend>Environment</legend>
-    <electron-versions />
-  </fieldset>
-
-  <p>
-    Edit
-    <code>packages/renderer/src/App.vue</code> to test hot module replacement.
-  </p>
+        <search-player />
+      </main>
+    </div>
+  </div>
 </template>
 
 <style>
