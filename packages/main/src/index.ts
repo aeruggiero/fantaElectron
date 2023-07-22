@@ -3,7 +3,6 @@ import {app, ipcMain, dialog} from 'electron';
 import './security-restrictions';
 import {restoreOrCreateWindow} from '/@/mainWindow';
 import {platform} from 'node:process';
-
 /**
  * Prevent electron from running multiple instances.
  */

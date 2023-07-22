@@ -1,6 +1,38 @@
 import type {player, team, teamInfo, regole} from '../../interfaces';
-import db from './dbmgr';
+import * as sqlite3 from 'sqlite3';
+/* const sqlite3 = require('sqlite3').verbose(); */
+const db = new sqlite3.Database('./fanta.sqlite3');
 const {ipcRenderer} = require('electron');
+(async () => {
+  db.run(`CREATE TABLE IF NOT EXISTS "giocatori" (
+	"id"	INTEGER,
+	"nome"	TEXT,
+	"squadra"	TEXT,
+	"ruolo"	TEXT,
+	"quotazione"	REAL,
+	"trequartista"	INTEGER DEFAULT 0,
+	"squadra_fanta"	INTEGER,
+	FOREIGN KEY("squadra_fanta") REFERENCES "squadre"("id") ON DELETE SET NULL,
+	PRIMARY KEY("id" AUTOINCREMENT)
+)`);
+  db.run(`CREATE TABLE IF NOT EXISTS "regole" (
+	"id"	INTEGER,
+	"finanze_iniziali"	INTEGER DEFAULT 0,
+	"max_rosa"	INTEGER DEFAULT 0,
+	"max_atk"	INTEGER DEFAULT 0,
+	"max_dc"	INTEGER DEFAULT 0,
+	"max_por"	INTEGER DEFAULT 0,
+	"max_cc"	INTEGER DEFAULT 0,
+	PRIMARY KEY("id" AUTOINCREMENT)
+)`);
+  db.run(`CREATE TABLE IF NOT EXISTS "squadre" (
+	"id"	INTEGER UNIQUE,
+	"nome"	TEXT,
+	"finanze"	INTEGER DEFAULT 0,
+	UNIQUE("nome"),
+	PRIMARY KEY("id" AUTOINCREMENT)
+)`);
+})();
 export default class testmgr {
   getNames = () => {
     return new Promise((resolve, reject) => {

@@ -1,6 +1,6 @@
 import {createApp} from 'vue';
 import App from '/@/App.vue';
-import {createRouter, createWebHistory} from 'vue-router';
+import {createRouter, createWebHashHistory} from 'vue-router';
 
 import HomePage from './views/HomePage.vue';
 import TeamPage from './views/TeamPage.vue';
@@ -12,11 +12,10 @@ import './index.css';
 import './style.css';
 import 'primevue/resources/themes/lara-light-indigo/theme.css';
 import ToastService from 'primevue/toastservice';
-
 const emitter = mitt(); // Initialize mitt
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes: [
     {
       path: '/',
