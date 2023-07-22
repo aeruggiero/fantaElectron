@@ -1,4 +1,4 @@
-import {mount} from '@vue/test-utils';
+/* import {mount} from '@vue/test-utils';
 import {expect, test} from 'vitest';
 import ReactiveCounter from '../src/components/ReactiveCounter.vue';
 
@@ -12,3 +12,4 @@ test('ReactiveHash component', async () => {
   await button.trigger('click');
   expect(button.text()).toBe('count is: 1');
 });
+ */

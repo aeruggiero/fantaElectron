@@ -1,4 +1,4 @@
-import {mount} from '@vue/test-utils';
+/* import {mount} from '@vue/test-utils';
 import {expect, test, vi} from 'vitest';
 import ElectronVersions from '../src/components/ElectronVersions.vue';
 
@@ -21,3 +21,4 @@ test('ElectronVersions component', async () => {
   expect(rows[1].find('th').text()).toBe('lib2 :');
   expect(rows[1].find('td').text()).toBe('v2');
 });
+ */

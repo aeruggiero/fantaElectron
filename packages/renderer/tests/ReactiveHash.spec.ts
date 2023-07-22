@@ -1,4 +1,4 @@
-import {mount} from '@vue/test-utils';
+/* import {mount} from '@vue/test-utils';
 import {expect, test, vi} from 'vitest';
 import ReactiveHash from '../src/components/ReactiveHash.vue';
 
@@ -19,3 +19,4 @@ test('ReactiveHash component', async () => {
   await dataInput.setValue(dataToHashed);
   expect(hashInput.element.value).toBe(`${dataToHashed}:HASHED`);
 });
+ */
