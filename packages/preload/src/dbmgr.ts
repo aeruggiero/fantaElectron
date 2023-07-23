@@ -1,4 +1,4 @@
-import type {player, team, teamInfo, regole} from '../../interfaces';
+import type {player, team, teamInfo, regole} from './interfaces';
 import * as sqlite3 from 'sqlite3';
 /* const sqlite3 = require('sqlite3').verbose(); */
 const db = new sqlite3.Database('./fanta.sqlite3');

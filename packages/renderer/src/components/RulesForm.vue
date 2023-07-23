@@ -3,7 +3,7 @@ import InputNumber from 'primevue/inputnumber';
 import Button from 'primevue/button';
 import {useForm, useField} from 'vee-validate';
 import {onMounted} from 'vue';
-import type {regole} from '../../../interfaces';
+import type {regole} from '../../../preload/src/interfaces';
 import {testmgr, openDialog} from '#preload';
 const {handleSubmit} = useForm();
 const finanze_iniziali = useField('finanze_iniziali', validateField);
@@ -16,7 +16,7 @@ var rules: regole;
 openDialog('showMessageBox', {
   title: 'Select a file',
   type: 'error',
-  message: 'suca',
+  message: 'Try',
 });
 
 onMounted(async () => {

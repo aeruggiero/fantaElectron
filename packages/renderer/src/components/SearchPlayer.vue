@@ -5,7 +5,7 @@ import {testmgr} from '#preload';
 import {useForm, useField} from 'vee-validate';
 import Button from 'primevue/button';
 import Dropdown from 'primevue/dropdown';
-import type {player, teamInfo} from '../../../interfaces';
+import type {player, teamInfo} from '../../../preload/src/interfaces';
 import type {Emitter, EventType} from 'mitt';
 interface searchObject {
   originalEvent: InputEvent;
