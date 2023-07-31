@@ -117,10 +117,7 @@ const search = async (event: searchObject) => {
         id="number-error"
         class="p-error"
       >
-        {{
-          squadra.errorMessage.value ||
-            (squadra.errors.value.length > 0 ? squadra.errors.value : '&nbsp;')
-        }}
+        {{ squadra.errorMessage.value }}
       </small>
     </div>
     <div class="w-full">
