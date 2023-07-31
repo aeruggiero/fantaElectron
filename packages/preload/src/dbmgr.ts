@@ -251,12 +251,18 @@ export default class testmgr {
   };
   getRegole = (): Promise<regole> => {
     return new Promise((resolve, reject) => {
-      db.get('SELECT * FROM regole', [], function (err: string, rows: regole) {
+      db.get('SELECT * FROM regole LIMIT 1', [], function (err: string, rows: regole) {
         if (err) {
           console.error(err);
           return reject(err);
         }
-        resolve(rows);
+        if (!rows) {
+          db.run(
+            'INSERT INTO regole(id,finanze_iniziali,max_rosa,max_atk,max_dc,max_cc,max_por) VALUES(1,50,0,0,0,0,0)',
+          );
+        } else {
+          return resolve(rows);
+        }
       });
     });
   };

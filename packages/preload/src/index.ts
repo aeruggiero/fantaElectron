@@ -4,9 +4,8 @@
 import {ipcRenderer} from 'electron';
 import queries from './dbmgr';
 
-const XLSX = require('xlsx');
+import * as XLSX from 'XLSX';
 const testmgr = new queries();
-
 export function openDialog(method: string, config: object) {
   return ipcRenderer.invoke('dialog', method, config);
 }

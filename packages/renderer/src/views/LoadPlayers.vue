@@ -5,15 +5,15 @@ import {useToast} from 'primevue/usetoast';
 import {testmgr} from '#preload';
 import Toast from 'primevue/toast';
 import Button from 'primevue/button';
-import {utils, writeFile, readFile} from 'XLSX';
+import {XLSX} from '#preload';
 import type {player} from '../../../preload/src/interfaces';
 const toast = useToast();
 const onAdvancedUpload = async (event: FileUploadRemoveUploadedFile) => {
   if (event.files && event.files[0]) {
     try {
-      const workbook = readFile(event.files[0].path);
+      const workbook = XLSX.readFile(event.files[0].path);
       const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-      const data = utils.sheet_to_json(worksheet);
+      const data = XLSX.utils.sheet_to_json(worksheet);
       await testmgr.addPlayers(data as player[]);
       toast.add({severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000});
     } catch (error) {
@@ -23,10 +23,10 @@ const onAdvancedUpload = async (event: FileUploadRemoveUploadedFile) => {
 };
 const downloadTemplate = () => {
   const aoaData = [['Nome', 'Squadra', 'Ruolo', 'Quotazione', 'Trequartista']];
-  const workSheet = utils.aoa_to_sheet(aoaData);
-  const workBook = utils.book_new();
-  utils.book_append_sheet(workBook, workSheet, 'Sheet 1');
-  writeFile(workBook, 'template.xlsx');
+  const workSheet = XLSX.utils.aoa_to_sheet(aoaData);
+  const workBook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workBook, workSheet, 'Sheet 1');
+  XLSX.writeFile(workBook, 'template.xlsx');
 };
 </script>
 <template>

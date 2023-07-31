@@ -16,12 +16,12 @@ var rules: regole;
 
 onMounted(async () => {
   rules = <regole>await testmgr.getRegole();
-  finanze_iniziali.setValue(rules.finanze_iniziali);
-  max_rosa.setValue(rules.max_rosa);
-  max_atk.setValue(rules.max_atk);
-  max_cc.setValue(rules.max_cc);
-  max_dc.setValue(rules.max_dc);
-  max_por.setValue(rules.max_por);
+  finanze_iniziali.setValue(rules.finanze_iniziali ?? 0);
+  max_rosa.setValue(rules.max_rosa ?? 0);
+  max_atk.setValue(rules.max_atk ?? 0);
+  max_cc.setValue(rules.max_cc ?? 0);
+  max_dc.setValue(rules.max_dc ?? 0);
+  max_por.setValue(rules.max_por ?? 0);
 });
 
 function validateField(value: number) {
@@ -34,7 +34,7 @@ function validateField(value: number) {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const onSubmit = handleSubmit(async (values, actions) => {
-  values.id = rules.id;
+  values.id = rules.id ?? 1;
   try {
     await testmgr.updateRegole(values as regole);
     openDialog('showMessageBox', {
