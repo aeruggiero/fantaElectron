@@ -45,7 +45,7 @@ const onSubmit = handleSubmit(async (values, actions) => {
     });
   } catch (error) {
     openDialog('showMessageBox', {
-      title: 'ERRORE',
+      title: 'ERRORE!',
       type: 'error',
       message: error,
     });
