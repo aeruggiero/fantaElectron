@@ -1,5 +1,6 @@
 export interface player {
   id: number;
+  nome: string;
   quotazione: number;
   ruolo: string;
   trequartista: string;
@@ -28,4 +29,11 @@ export interface regole {
   max_cc: number;
   max_por: number;
   finanze_iniziali: number;
+}
+export interface loadPlayer {
+  nome: string;
+  squadra: string;
+  ruolo: string;
+  quotazione: number;
+  trequartista: string;
 }

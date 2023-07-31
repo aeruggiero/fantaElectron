@@ -13,11 +13,6 @@ const max_dc = useField('max_dc', validateField);
 const max_cc = useField('max_cc', validateField);
 const max_por = useField('max_por', validateField);
 var rules: regole;
-openDialog('showMessageBox', {
-  title: 'Select a file',
-  type: 'error',
-  message: 'Try',
-});
 
 onMounted(async () => {
   rules = <regole>await testmgr.getRegole();
@@ -42,7 +37,17 @@ const onSubmit = handleSubmit(async (values, actions) => {
   values.id = rules.id;
   try {
     await testmgr.updateRegole(values as regole);
+    openDialog('showMessageBox', {
+      title: 'Regole salvate',
+      type: 'info',
+      message: 'Le regole sono state salvate con successo!',
+    });
   } catch (errore) {
+    openDialog('showMessageBox', {
+      title: 'ERRORE',
+      type: 'error',
+      message: "C'è stato un errore durante il salvataggio delle regole.",
+    });
     console.log(errore);
   }
 });

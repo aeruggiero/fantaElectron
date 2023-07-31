@@ -1,4 +1,4 @@
-import type {player, team, teamInfo, regole} from './interfaces';
+import type {player, regole, team, teamInfo} from './interfaces';
 import * as sqlite3 from 'sqlite3';
 /* const sqlite3 = require('sqlite3').verbose(); */
 const db = new sqlite3.Database('./fanta.sqlite3');
@@ -45,16 +45,17 @@ export default class testmgr {
       });
     });
   };
-  addName = (newName: string) => {
-    const sql = `INSERT INTO squadre(nome) VALUES('${newName}')`;
-    db.exec(sql, err => {
-      if (err) {
-        ipcRenderer.send('dialog', {
-          message: 'Nome già presente',
-          type: 'error',
-          title: 'Nome già presente',
-        });
-      }
+  addName = async (newName: string) => {
+    const regole: regole = await this.getRegole();
+    return new Promise((resolve, reject) => {
+      const sql = `INSERT INTO squadre(nome,finanze) VALUES('${newName}',${regole.finanze_iniziali})`;
+      db.exec(sql, err => {
+        if (err) {
+          return reject('Nome già presente');
+        } else {
+          return resolve(true);
+        }
+      });
     });
   };
   addPlayerToTeam = async (player: player, team: teamInfo) => {
@@ -92,6 +93,10 @@ export default class testmgr {
             failed = true;
           }
           break;
+        }
+        default: {
+          message = 'Non esiste sto giocatore ao!';
+          failed = true;
         }
       }
       if (failed) return reject(message);
@@ -133,8 +138,26 @@ export default class testmgr {
   };
   addPlayers = (data: player[]) => {
     return new Promise((resolve, reject) => {
+      data.forEach(el => {
+        if (
+          !(
+            typeof el === 'object' &&
+            'Nome' in el &&
+            'Ruolo' in el &&
+            'Squadra' in el &&
+            'Quotazione' in el &&
+            'Trequartista' in el
+          )
+        ) {
+          return reject('IL FILE CARICATO NON HA IL TEMPLATE CORRETTO.');
+        }
+      });
       db.serialize(() => {
-        db.exec('DELETE FROM giocatori');
+        const selectStmt = db.prepare('SELECT nome FROM giocatori WHERE nome = ?');
+        const updateStmt = db.prepare(
+          `UPDATE giocatori SET squadra = $squadra,ruolo = $ruolo,quotazione = $quotazione,
+          trequartista = $trequartista WHERE nome = $nome`,
+        );
         const insertStmt = db.prepare(
           'INSERT INTO giocatori (nome, squadra, ruolo, quotazione, trequartista) VALUES(?,?,?,?,?)',
         );
@@ -142,14 +165,30 @@ export default class testmgr {
           const newRow = Object.fromEntries(
             Object.entries(row).map(([k, v]) => [k.toLowerCase(), v]),
           );
-          insertStmt.run(
-            newRow.nome,
-            newRow.squadra,
-            newRow.ruolo,
-            newRow.quotazione,
-            newRow.trequartista,
-          );
+          selectStmt.get(newRow.nome, (err, row: player) => {
+            if (err) {
+              reject('Problema');
+            }
+            if (row && row.nome == newRow.nome) {
+              updateStmt.run({
+                $squadra: newRow.squadra,
+                $ruolo: newRow.ruolo,
+                $quotazione: newRow.quotazione,
+                $trequartista: newRow.trequartista,
+                $nome: newRow.nome,
+              });
+            } else {
+              insertStmt.run(
+                newRow.nome,
+                newRow.squadra,
+                newRow.ruolo,
+                newRow.quotazione,
+                newRow.trequartista,
+              );
+            }
+          });
         }
+        selectStmt.finalize();
         insertStmt.finalize();
         db.get(
           'SELECT COUNT(nome) AS count FROM giocatori',
@@ -272,6 +311,14 @@ export default class testmgr {
           );
         },
       );
+    });
+  };
+  deleteTeam = (team: teamInfo) => {
+    return new Promise((resolve, reject) => {
+      db.run('DELETE FROM squadre WHERE id=$teamID', {$teamID: team.id}, err => {
+        if (err) return reject(err);
+        else return resolve(true);
+      });
     });
   };
 }

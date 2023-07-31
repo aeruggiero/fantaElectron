@@ -3,6 +3,7 @@
  */
 import {ipcRenderer} from 'electron';
 import queries from './dbmgr';
+
 const XLSX = require('xlsx');
 const testmgr = new queries();
 

@@ -3,8 +3,8 @@ import RouterLinkButton from './RouterLinkButton.vue';
 </script>
 
 <template>
-  <aside class="w-full sm:w-1/3 md:w-1/4 px-2">
-    <div class="sticky top-0 p-4 bg-white rounded-xl w-full">
+  <aside class="w-full sm:w-1/3 md:w-1/4 px-2 bg-slate-400">
+    <div class="sticky top-0 p-4 rounded-xl w-full">
       <ul class="nav flex flex-col overflow-hidden gap-3">
         <li>
           <RouterLinkButton
