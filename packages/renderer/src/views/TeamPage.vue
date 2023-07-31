@@ -1,4 +1,7 @@
-<script lang="ts" setup>
+<script
+  lang="ts"
+  setup
+>
 import {testmgr} from '#preload';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';

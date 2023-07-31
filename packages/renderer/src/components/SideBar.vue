@@ -1,4 +1,7 @@
-<script setup lang="ts">
+<script
+  setup
+  lang="ts"
+>
 import RouterLinkButton from './RouterLinkButton.vue';
 </script>
 

@@ -1,4 +1,7 @@
-<script setup lang="ts">
+<script
+  setup
+  lang="ts"
+>
 import Button from 'primevue/button';
 type ToProp = string | {[key: string]: unknown};
 const props = defineProps({

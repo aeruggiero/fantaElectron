@@ -1,4 +1,7 @@
-<script lang="ts" setup>
+<script
+  lang="ts"
+  setup
+>
 import {computed, ref} from 'vue';
 import {sha256sum} from '#preload';
 

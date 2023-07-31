@@ -1,4 +1,7 @@
-<script setup lang="ts">
+<script
+  setup
+  lang="ts"
+>
 import {onMounted, ref, inject} from 'vue';
 import AutoComplete from 'primevue/autocomplete';
 import {openDialog, testmgr} from '#preload';

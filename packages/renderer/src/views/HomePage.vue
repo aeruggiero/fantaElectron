@@ -1,4 +1,7 @@
-<script lang="ts" setup>
+<script
+  lang="ts"
+  setup
+>
 import TeamTable from '../components/TeamTable.vue';
 import AddTeamForm from '../components/AddTeamForm.vue';
 import SearchPlayer from '../components/SearchPlayer.vue';

@@ -1,4 +1,7 @@
-<script setup lang="ts">
+<script
+  setup
+  lang="ts"
+>
 import {inject} from 'vue';
 import {openDialog, testmgr} from '#preload';
 import {useForm, useField} from 'vee-validate';

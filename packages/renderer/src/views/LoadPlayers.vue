@@ -1,4 +1,7 @@
-<script setup lang="ts">
+<script
+  setup
+  lang="ts"
+>
 import type {FileUploadRemoveUploadedFile} from 'primevue/fileupload';
 import FileUpload from 'primevue/fileupload';
 import {useToast} from 'primevue/usetoast';

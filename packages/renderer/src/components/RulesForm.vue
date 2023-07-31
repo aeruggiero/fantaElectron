@@ -1,4 +1,7 @@
-<script lang="ts" setup>
+<script
+  lang="ts"
+  setup
+>
 import InputNumber from 'primevue/inputnumber';
 import Button from 'primevue/button';
 import {useForm, useField} from 'vee-validate';
