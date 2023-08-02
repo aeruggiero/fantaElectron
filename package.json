@@ -29,7 +29,8 @@
     "postinstall": "cross-env ELECTRON_RUN_AS_NODE=1 electron scripts/update-electron-vendors.mjs",
     "format": "npx prettier --write \"**/*.{js,mjs,cjs,ts,mts,cts,vue,json}\"",
     "start": "electron-forge start",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "rebuild": "electron-rebuild -f -w better-sqlite3"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.2.1",
@@ -38,6 +39,7 @@
     "@electron-forge/maker-squirrel": "^6.2.1",
     "@electron-forge/maker-zip": "^6.2.1",
     "@electron-forge/plugin-auto-unpack-natives": "^6.2.1",
+    "@types/better-sqlite3": "^7.6.4",
     "@types/node": "18.16.19",
     "@typescript-eslint/eslint-plugin": "6.1.0",
     "@vitejs/plugin-vue": "4.2.3",
@@ -62,11 +64,11 @@
     "vue-tsc": "1.8.5"
   },
   "dependencies": {
+    "better-sqlite3": "^8.5.0",
     "electron-squirrel-startup": "^1.0.0",
     "electron-updater": "6.1.1",
     "mitt": "^3.0.1",
     "primevue": "^3.30.2",
-    "sqlite3": "^5.0.0",
     "vee-validate": "^4.10.7",
     "vue-router": "^4.2.4",
     "xlsx": "^0.18.5"

@@ -37,6 +37,7 @@ function validateField(value: number) {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const onSubmit = handleSubmit(async (values, actions) => {
+  console.log(values);
   values.id = rules.id ?? 1;
   try {
     await testmgr.updateRegole(values as regole);

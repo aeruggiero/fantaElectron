@@ -14,17 +14,17 @@ module.exports = async function () {
   return {
     directories: {
       output: 'dist',
-      /* buildResources: 'buildResources', */
-      buildResources: 'portable',
     },
     files: ['packages/**/dist/**'],
     extraMetadata: {
       version: getVersion(),
     },
-    portable: {
-      artifactName: 'ciao',
+    win: {
+      target: ['portable'],
     },
-
+    portable: {
+      artifactName: 'pvmplayer_portable.exe',
+    },
     // Specify linux target just for disabling snap compilation
     linux: {
       target: 'deb',

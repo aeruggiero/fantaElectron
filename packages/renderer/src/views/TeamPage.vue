@@ -1,7 +1,4 @@
-<script
-  lang="ts"
-  setup
->
+<script lang="ts" setup>
 import {testmgr} from '#preload';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -14,7 +11,7 @@ const team = ref();
 const tableUpdate = ref(0);
 const teamPlayers = ref();
 onMounted(async () => {
-  team.value = (await testmgr.getTeamList(Number(route.params.id)))[0];
+  team.value = await testmgr.getTeamList(Number(route.params.id));
   teamPlayers.value = await testmgr.getPlayers(null, Number(route.params.id));
 });
 const removePlayer = async (playerId: number, playerValue: number) => {

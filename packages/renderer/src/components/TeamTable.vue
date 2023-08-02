@@ -26,9 +26,9 @@ onMounted(async () => {
         :value="teams"
         paginator
         scrollable
-        scroll-height="500px"
         :rows="5"
         class="p-datatable-sm"
+        :rows-per-page-options="[5, 10, 20]"
       >
         <Column
           field="nome"

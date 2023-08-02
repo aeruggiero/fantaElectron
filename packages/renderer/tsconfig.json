@@ -15,7 +15,8 @@
       "#database": ["../database/src/index"],
       "/@/*": ["./src/*"]
     },
-    "lib": ["ESNext", "dom", "dom.iterable"]
+    "lib": ["ESNext", "dom", "dom.iterable"],
+    "allowSyntheticDefaultImports": true
   },
   "include": [
     "src/**/*.vue",
