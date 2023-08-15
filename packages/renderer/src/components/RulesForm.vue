@@ -1,7 +1,4 @@
-<script
-  lang="ts"
-  setup
->
+<script lang="ts" setup>
 import InputNumber from 'primevue/inputnumber';
 import Button from 'primevue/button';
 import {useForm, useField} from 'vee-validate';
@@ -59,7 +56,13 @@ const onSubmit = handleSubmit(async (values, actions) => {
 <template>
   <form
     id="fantaRules"
-    style="display: flex; flex-direction: column; gap: 2rem; width: 10rem"
+    style="
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      justify-content: center;
+      align-items: center;
+    "
     @submit="onSubmit"
   >
     Regole squadre:

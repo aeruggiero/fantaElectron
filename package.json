@@ -1,6 +1,6 @@
 {
-  "name": "vite-electron-builder",
-  "description": "Secure boilerplate for Electron app based on Vite",
+  "name": "fantaelectron",
+  "description": "Un app per il fantacalcio... bravooooooo",
   "version": "1.0.2",
   "private": true,
   "author": {
@@ -13,6 +13,7 @@
     "build:main": "cd ./packages/main && vite build",
     "build:preload": "cd ./packages/preload && vite build",
     "build:renderer": "vite build --config ./packages/renderer/vite.config.js",
+    "dist": "electron-builder --win=portable",
     "compile": "cross-env MODE=production npm run build && electron-builder build --config .electron-builder.config.js --dir --config.asar=true",
     "package": "electron-forge package",
     "test": "npm run test:main && npm run test:preload && npm run test:renderer && npm run test:e2e",
@@ -47,6 +48,7 @@
     "autoprefixer": "^10.4.14",
     "cross-env": "7.0.3",
     "electron": "25.3.1",
+    "electron-builder": "^24.6.3",
     "eslint": "8.45.0",
     "eslint-plugin-vue": "9.15.1",
     "happy-dom": "10.5.2",
@@ -69,6 +71,7 @@
     "electron-updater": "6.1.1",
     "mitt": "^3.0.1",
     "primevue": "^3.30.2",
+    "sweetalert2": "^11.6.13",
     "vee-validate": "^4.10.7",
     "vue-router": "^4.2.4",
     "xlsx": "^0.18.5"

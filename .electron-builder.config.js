@@ -15,11 +15,13 @@ module.exports = async function () {
     directories: {
       output: 'dist',
     },
+    productName: 'FantaElectron',
     files: ['packages/**/dist/**'],
     extraMetadata: {
       version: getVersion(),
     },
     win: {
+      icon: './icon.ico',
       target: ['portable'],
     },
     portable: {

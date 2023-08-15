@@ -5,6 +5,7 @@ export interface player {
   ruolo: string;
   trequartista: string;
   squadra: string;
+  prezzo_acquisto: number;
 }
 export interface teamInfo {
   id: number;

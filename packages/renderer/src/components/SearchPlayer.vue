@@ -1,13 +1,11 @@
-<script
-  setup
-  lang="ts"
->
+<script setup lang="ts">
 import {onMounted, ref, inject} from 'vue';
 import AutoComplete from 'primevue/autocomplete';
 import {openDialog, testmgr} from '#preload';
 import {useForm, useField} from 'vee-validate';
 import Button from 'primevue/button';
 import Dropdown from 'primevue/dropdown';
+import InputNumber from 'primevue/inputnumber';
 import type {player, teamInfo} from '../../../preload/src/interfaces';
 import type {Emitter, EventType} from 'mitt';
 interface searchObject {
@@ -25,6 +23,12 @@ function validatePlayer(player: player) {
   }
   return true;
 }
+function validatePrice(price: number) {
+  if (!price || !(price > 0)) {
+    return 'Bello devi pagare!!';
+  }
+  return true;
+}
 function validateTeam(team: teamInfo) {
   if (!team || !team.nome) {
     return 'È richiesto scegliere una squadra.';
@@ -35,7 +39,7 @@ function validateTeam(team: teamInfo) {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const onSubmit = handleSubmit(async (values, actions) => {
   try {
-    await testmgr.addPlayerToTeam(values.giocatore, values.squadra);
+    await testmgr.addPlayerToTeam(values.giocatore, values.squadra, values.playerPrice);
     resetForm();
     notifyTable();
     openDialog('showMessageBox', {
@@ -60,6 +64,11 @@ const {
   errors: gError,
   errorMessage: gErrMex,
 } = useField('giocatore', validatePlayer);
+const {
+  value: price,
+  errors: priceError,
+  errorMessage: priceErrorMex,
+} = useField('playerPrice', validatePrice);
 const squadra = useField('squadra', validateTeam);
 var teams: teamInfo[];
 onMounted(async () => {
@@ -105,6 +114,20 @@ const search = async (event: searchObject) => {
         {{ gErrMex || (gError.length > 0 ? gError : '&nbsp;') }}
       </small>
     </div>
+    <div class="inline-flex flex-col w-fit">
+      <InputNumber
+        id="playerprice"
+        v-model="price"
+        placeholder="Prezzo d'acquisto"
+      />
+      <small
+        id="number-error"
+        class="p-error"
+      >
+        {{ priceErrorMex || (priceError.length > 0 ? priceError : '&nbsp;') }}
+      </small>
+    </div>
+
     <div class="inline-flex flex-col w-fit">
       <Dropdown
         v-model="squadra.value.value"

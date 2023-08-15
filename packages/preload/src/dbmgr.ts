@@ -45,15 +45,17 @@ export default class testmgr {
     return new Promise((resolve, reject) => {
       if (!(newName.length > 0)) reject('Nome vuoto!');
       try {
+        db.exec('BEGIN');
         const sql = `INSERT INTO squadre(nome,finanze) VALUES('${newName}',${regole.finanze_iniziali})`;
         db.prepare(sql).run();
+        db.exec('COMMIT');
       } catch (error) {
         reject((error as {message: string}).message);
       }
       resolve(true);
     });
   };
-  addPlayerToTeam = async (player: player, team: teamInfo) => {
+  addPlayerToTeam = async (player: player, team: teamInfo, playerPrice: number) => {
     const regole = await this.getRegole();
     return new Promise((resolve, reject) => {
       let failed = false;
@@ -95,21 +97,26 @@ export default class testmgr {
         }
       }
       if (failed) return reject(message);
-      if (player.quotazione > team.finanze) {
+      if (playerPrice > team.finanze) {
         return reject('Questa squadra non ha abbastanza soldi per effettuare l acquisto.');
       }
       if (regole.max_rosa <= team.tot_giocatori) {
         return reject('Questa squadra non ha più slot giocatori disponibili.');
       }
-      db.prepare('UPDATE giocatori SET squadra_fanta = $team_id WHERE id=$player_id').run({
+      db.exec('BEGIN');
+      db.prepare(
+        'UPDATE giocatori SET squadra_fanta = $team_id, prezzo_acquisto = $prezzo_acquisto WHERE id=$player_id',
+      ).run({
         team_id: team.id,
         player_id: player.id,
+        prezzo_acquisto: playerPrice,
       });
 
       db.prepare('UPDATE squadre SET finanze=finanze - $playerValue WHERE id=$team_id').run({
-        playerValue: player.quotazione,
+        playerValue: playerPrice,
         team_id: team.id,
       });
+      db.exec('COMMIT');
       resolve(true);
     });
   };
@@ -142,6 +149,7 @@ export default class testmgr {
           Object.entries(row).map(([k, v]) => [k.toLowerCase(), v]),
         );
         const player = db.prepare('SELECT nome FROM giocatori WHERE nome = ?').get(newRow.nome);
+        db.exec('BEGIN');
         if (player) {
           updateStmt.run({
             squadra: newRow.squadra,
@@ -159,6 +167,7 @@ export default class testmgr {
             newRow.trequartista,
           );
         }
+        db.exec('COMMIT');
       }
       const rows = db.prepare('SELECT COUNT(nome) AS count FROM giocatori').get();
 
@@ -210,9 +219,11 @@ export default class testmgr {
     return new Promise(resolve => {
       let rules = db.prepare('SELECT * FROM regole LIMIT 1').get();
       if (!rules) {
+        db.exec('BEGIN');
         db.prepare(
           'INSERT INTO regole(id,finanze_iniziali,max_rosa,max_atk,max_dc,max_cc,max_por) VALUES(1,50,0,0,0,0,0)',
         ).run();
+        db.exec('COMMIT');
         rules = db.prepare('SELECT * FROM regole LIMIT 1').get();
       }
       resolve(rules as regole);
@@ -220,7 +231,7 @@ export default class testmgr {
   };
   updateRegole = (values: regole) => {
     return new Promise(resolve => {
-      console.log(values);
+      db.exec('BEGIN');
       db.prepare(
         'UPDATE regole SET finanze_iniziali = $finanze_iniziali, max_rosa=$max_rosa,max_atk=$max_atk,max_cc=$max_cc,max_dc=$max_dc,max_por=$max_por WHERE id=$id',
       ).run({
@@ -232,11 +243,13 @@ export default class testmgr {
         max_dc: values.max_dc,
         max_por: values.max_por,
       });
+      db.exec('COMMIT');
       resolve(true);
     });
   };
   removePlayer = (team_id: number, player_id: number, player_value: number) => {
     return new Promise(resolve => {
+      db.exec('BEGIN');
       db.prepare('UPDATE giocatori SET squadra_fanta = NULL WHERE id = $player_id').run({
         player_id: player_id,
       });
@@ -244,12 +257,15 @@ export default class testmgr {
         quotazione: player_value,
         team_id: team_id,
       });
+      db.exec('COMMIT');
       resolve(true);
     });
   };
   deleteTeam = (team: teamInfo) => {
     return new Promise(resolve => {
+      db.exec('BEGIN');
       db.prepare('DELETE FROM squadre WHERE id=?').run(team.id);
+      db.exec('COMMIT');
       resolve(true);
     });
   };

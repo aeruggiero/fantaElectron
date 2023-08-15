@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import {testmgr} from '#preload';
+import Swal from 'sweetalert2';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import {onMounted, ref} from 'vue';
@@ -9,18 +10,54 @@ const route = useRoute();
 const router = useRouter();
 const team = ref();
 const tableUpdate = ref(0);
+const tableUpdate2 = ref(0);
 const teamPlayers = ref();
 onMounted(async () => {
   team.value = await testmgr.getTeamList(Number(route.params.id));
   teamPlayers.value = await testmgr.getPlayers(null, Number(route.params.id));
 });
-const removePlayer = async (playerId: number, playerValue: number) => {
-  const update = await testmgr.removePlayer(Number(route.params.id), playerId, playerValue);
-  if (update) {
-    team.value = (await testmgr.getTeamList(Number(route.params.id)))[0];
-    teamPlayers.value = await testmgr.getPlayers(null, Number(route.params.id));
-    tableUpdate.value++;
-  }
+const removePlayer = async (
+  playerId: number,
+  playerValue: number,
+  quotazione: number,
+  nome: string,
+) => {
+  Swal.fire({
+    title: `Rimuovi ${nome}`,
+    html: `Stai per rimuovere ${nome} dalla squadra. Quanto vuoi fare recuperare alla squadra?
+    <div class='m-3 bg-yellow-300 w-fit rounded'>Prezzo d'acquisto: ${playerValue} <input type='radio' name='quantity'value="${playerValue}"/></div>
+    <div class='m-3 bg-yellow-300 w-fit rounded'>Quotazione: ${
+      quotazione ?? 'N.A.'
+    } <input type='radio' name='quantity' value="${quotazione}"/></div>
+    `,
+    icon: 'question',
+    preConfirm: () => {
+      const quantity = (<HTMLInputElement>(
+        Swal.getPopup()?.querySelector('input[name="quantity"]:checked')
+      ))?.value;
+      if (!quantity) {
+        Swal.fire('Errore', "C'è stato un errore.", 'error');
+        return;
+      }
+      return quantity;
+    },
+  }).then(async quantity => {
+    if (!quantity || !quantity.value || !(Number(quantity.value) > 0)) {
+      Swal.fire('Errore', "C'è stato un errore.", 'error');
+      return;
+    }
+    const update = await testmgr.removePlayer(
+      Number(route.params.id),
+      playerId,
+      Number(quantity.value),
+    );
+    if (update) {
+      team.value = await testmgr.getTeamList(Number(route.params.id));
+      teamPlayers.value = await testmgr.getPlayers(null, Number(route.params.id));
+      tableUpdate.value++;
+      tableUpdate2.value++;
+    }
+  });
 };
 const deleteTeam = async () => {
   try {
@@ -45,7 +82,7 @@ const deleteTeam = async () => {
       />
       <div class="border rounded-lg overflow-hidden dark:border-gray-700 my-4">
         <table
-          :key="tableUpdate"
+          :key="tableUpdate2"
           class="min-w-full divide-y divide-gray-200 dark:divide-gray-700"
         >
           <tr>
@@ -83,13 +120,18 @@ const deleteTeam = async () => {
         >
         </Column>
         <Column
+          field="ruolo"
+          header="Ruolo"
+          sortable
+        ></Column>
+        <Column
           field="quotazione"
           header="Quotazione"
           sortable
         ></Column>
         <Column
-          field="ruolo"
-          header="Ruolo"
+          field="prezzo_acquisto"
+          header="Prezzo d'acquisto"
           sortable
         ></Column>
         <Column header="Elimina">
@@ -99,7 +141,7 @@ const deleteTeam = async () => {
               severity="danger"
               raised
               rounded
-              @click="removePlayer(data.id, data.quotazione)"
+              @click="removePlayer(data.id, data.prezzo_acquisto, data.quotazione, data.nome)"
             />
           </template>
         </Column>
